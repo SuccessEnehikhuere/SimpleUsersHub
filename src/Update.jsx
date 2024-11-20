@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router-dom'
+import { updateUser } from './UserReducer';
 
 function Update() {
   const {id} = useParams();
@@ -9,14 +10,26 @@ function Update() {
   console.log(existingUser)
   const {name, email} = existingUser[0];
   const [updateName, setUpdateName] = useState(name)
-  const [updateEmail, setUpdateEmail] = useState(email)
+  const [updateEmail, setUpdateEmail] = useState(email);
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
+
+  const handleUpdate = (event)=>{
+   event.preventDefault();
+   dispatch(updateUser({
+    id: id,
+    name: updateName,
+    email: updateEmail
+   }))
+   navigate('/')
+  }
 
 
   return (
     <div className="d-flex w-100 vh-100 justify-content-center align-items-center">
       <div className="w-50 border bg-secondary text-white p-5">
         <h3>Update User</h3>
-        <form>
+        <form onSubmit={handleUpdate}>
           <div>
             <label htmlFor="name">Name:</label>
             <input
